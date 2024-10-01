@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.card {
+  flex: 1;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 1rem;
+}
+
+.cardBody {
+  text-align: left;
+}
+
+.highlight {
+  color: #F5A623;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  border-radius: 50%;
+}

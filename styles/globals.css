@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .font-primary {
+        font-family: 'sans-serif', sans-serif;
+    }
+
+    body {
+        @apply font-primary bg-primary text-white leading-loose;
+    }
+
+    .h1 {
+        @apply text-[48px] xl:text-[80px] leading-[1.1] font-semibold;
+    }
+
+    .h2 {
+        @apply text-[36px] xl:text-[48px] leading-[1.1] font-semibold;
+    }
+    
+    .h3 {
+        @apply text-[20px] xl:text-[24px] leading-[1.1] font-semibold;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+      }
+      
+      .page-item {
+        margin: 0 5px;
+        padding: 8px 12px;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+      
+      .page-item:hover {
+        background-color: #f0f0f0; /* Change to your hover color */
+      }
+      
+      .page-item.isActive {
+        background-color: #007bff; /* Active page color */
+        color: white;
+        border: 1px solid #007bff;
+      }
+      
+}
