@@ -4,12 +4,7 @@ import {
   Button,
   Box,
   useColorMode,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
+
   Progress
 } from "@chakra-ui/react";
 import { Image } from "@nextui-org/react";
@@ -87,20 +82,6 @@ const TechCard = ({ title, languages, imagePath }: { title: string; languages: s
     </Card>
   );
 };
-
-// const ProjectCard = ({ title, description, imagePath, link }: { title: string; description: string; imagePath: string; link: string; }) => (
-//   <Card className="flex flex-col h-full" style={{ boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)", transition: "transform 0.3s", "&:hover": { transform: "scale(1.05)" } }}>
-//     <CardHeader className="text-center" style={{ fontWeight: "bold" }}>{title}</CardHeader>
-//     <CardBody className="flex-grow">
-//       <Image src={imagePath} alt={title} className="w-full h-48 object-cover mb-4" />
-//       <Text className="text-center">{description}</Text>
-//     </CardBody>
-//     <CardFooter>
-//       <Button as="a" href={link} target="_blank" colorScheme="teal" width="full">View Project</Button>
-//     </CardFooter>
-//   </Card>
-// );
-
 
 
 const TestimonialsSection = () => (
@@ -222,17 +203,7 @@ const Home = () => {
           ))}
         </Flex>
 
-        {/* Projects Section */}
-        {/* <Box textAlign="center" mt={12}>
-          <Text fontSize="3xl" fontWeight="bold">Projects</Text>
-          <Flex justifyContent="center" flexWrap="wrap" gap={4} mt={8}>
-            {projects.map((project, index) => (
-              <Box key={index} width={["100%", "48%", "30%"]}>
-                <ProjectCard {...project} />
-              </Box>
-            ))}
-          </Flex>
-        </Box> */}
+
 
         {/* Testimonials Section */}
         <TestimonialsSection />
