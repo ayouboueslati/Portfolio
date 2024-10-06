@@ -15,7 +15,7 @@ const projects = [
     {
         title:"portfolio",
         description:"my portfolio",
-        imagePath:"ayoub.jpg",
+        imagePath:"portfolio.jpg",
         technology:"web",
     },
     {

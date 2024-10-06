@@ -77,6 +77,7 @@ const TechCard = ({ title, languages, imagePath }: { title: string; languages: s
 
 const ContactSection = () => {
   const router = useRouter();
+  const { colorMode } = useColorMode();
 
   const handleContactPage = () => {
     router.push("/contacts");
@@ -84,13 +85,18 @@ const ContactSection = () => {
 
   return (
     <Box mt={12}>
-      <Text fontSize="3xl" fontWeight="bold">Contact Me</Text>
-      <Text>If you d like to get in touch, feel free to reach out!</Text>
-      <Button 
-        colorScheme="teal" 
+      <Text fontSize="3xl" fontWeight="bold" color={colorMode === 'light' ? 'gray.800' : 'white'}>
+        Contact Me
+      </Text>
+      <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+        If you d like to get in touch, feel free to reach out!
+      </Text>
+      <Button
+        colorScheme="teal"
         mt={4}
-        onClick={handleContactPage}>
-          Contact Me
+        onClick={handleContactPage}
+      >
+        Contact Me
       </Button>
     </Box>
   );
@@ -132,8 +138,7 @@ const Home = () => {
             </h1>
 
             <Text className="font-family" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-              I am a computer science student passionate about mobile app development, particularly with Flutter...
-            </Text>
+            I am a Software Engineering student specializing in mobile app development. I create intuitive and engaging applications using Flutter and Dart, focusing on user-friendly interfaces and seamless functionality. Explore my work to see how I blend creativity with technical expertise!            </Text>
 
             {/* Download CV Button */}
             <Flex alignItems="center" gap={8} mt={4}>
