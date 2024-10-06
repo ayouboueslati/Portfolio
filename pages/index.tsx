@@ -1,10 +1,9 @@
 import {Flex,Text,Button,Box,useColorMode,Container,Stack,IconButton,Divider} from "@chakra-ui/react";
 import { Image } from "@nextui-org/react";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import Skills from "./programming_skills";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
 
 
@@ -86,7 +85,7 @@ const ContactSection = () => {
   return (
     <Box mt={12}>
       <Text fontSize="3xl" fontWeight="bold">Contact Me</Text>
-      <Text>If you'd like to get in touch, feel free to reach out!</Text>
+      <Text>If you d like to get in touch, feel free to reach out!</Text>
       <Button 
         colorScheme="teal" 
         mt={4}
@@ -128,7 +127,7 @@ const Home = () => {
           {/* Text Section */}
           <div className="text-center xl:text-left xl:w-1/2" color={colorMode === 'light' ? 'gray.800' : 'white'}>
             <h1 className={`h1 mb-6 ${colorMode === 'light' ? 'text-gray-800' : 'text-white'}`}>
-              Hello I'm<br />
+              Hello I m<br />
               <span className="text-accent">Ayoub Oueslati</span>
             </h1>
 

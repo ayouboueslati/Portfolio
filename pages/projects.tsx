@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, Flex, Button, Container, useColorMode, Select, Skeleton, SkeletonText } from "@chakra-ui/react";
+import {  Text, Flex, Button, Container, useColorMode, Select, Skeleton} from "@chakra-ui/react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import { useRouter } from 'next/router';
 import projects from '../data/projectsData.js';
