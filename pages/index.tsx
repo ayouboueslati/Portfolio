@@ -16,11 +16,7 @@ const techCards = [
 
 
 
-const testimonials = [
-  { name: "John Doe", feedback: "Ayoub is a great developer!", role: "Former Mentor" },
-  { name: "Jane Smith", feedback: "Impressed with his skills in Flutter.", role: "Project Collaborator" },
-  // Add more testimonials as needed
-];
+
 
 
 
@@ -77,20 +73,7 @@ const TechCard = ({ title, languages, imagePath }: { title: string; languages: s
 };
 
 
-const TestimonialsSection = () => (
-  <Box mt={12}>
-    <Text fontSize="3xl" fontWeight="bold">Testimonials</Text>
-    <Flex justifyContent="center" flexWrap="wrap" gap={4}>
-      {testimonials.map((testimonial, index) => (
-        <Box key={index} p={4} borderWidth={1} borderRadius="md">
-          <Text fontWeight="bold">{testimonial.name}</Text>
-          <Text>"{testimonial.feedback}"</Text>
-          <Text fontStyle="italic">{testimonial.role}</Text>
-        </Box>
-      ))}
-    </Flex>
-  </Box>
-);
+
 
 
 const ContactSection = () => {
@@ -125,7 +108,6 @@ const Footer = () => (
         <Stack direction="row" spacing={4}>
           <IconButton as={Link} href="https://github.com/ayouboueslati" aria-label="GitHub" icon={<FaGithub />} variant="ghost" />
           <IconButton as={Link} href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" aria-label="LinkedIn" icon={<FaLinkedin />} variant="ghost" />
-          <IconButton as={Link} href="https://twitter.com/yourusername" aria-label="Twitter" icon={<FaTwitter />} variant="ghost" />
         </Stack>
       </Stack>
       <Divider my={6} borderColor="gray.700" />
@@ -138,7 +120,6 @@ const Footer = () => (
 
 const Home = () => {
   const { colorMode } = useColorMode();
-  const [selectedTech, setSelectedTech] = useState<{ title: string; languages: string[] } | null>(null);
 
   return (
     <section className={`relative h-full`}>
@@ -213,12 +194,6 @@ const Home = () => {
             </Box>
           ))}
         </Flex>
-
-
-
-        {/* Testimonials Section */}
-        <TestimonialsSection />
-
 
 
        {/* Skills Section */}

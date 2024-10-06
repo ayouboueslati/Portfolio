@@ -1,5 +1,5 @@
 import { Box, VStack, HStack, Text, useColorModeValue, Link } from "@chakra-ui/react";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt} from "react-icons/fa";
 
 export default function Contact() {
   const textColor = useColorModeValue("gray.800", "white");
@@ -14,19 +14,19 @@ export default function Contact() {
 
           <HStack spacing={4}>
             <Box as={FaPhone} size="24px" color="yellow.500" />
-            <Text color={textColor}>+1 234 567 8900</Text>
+            <Text color={textColor}>+216 28 560 384</Text>
           </HStack>
 
           <HStack spacing={4}>
             <Box as={FaEnvelope} size="24px" color="yellow.500" />
             <Link href="mailto:contact@example.com" color={textColor}>
-              contact@example.com
+              ayoubweslati00@gmail.com
             </Link>
           </HStack>
 
           <HStack spacing={4}>
             <Box as={FaMapMarkerAlt} size="24px" color="yellow.500" />
-            <Text color={textColor}>123 Main St, City, Country</Text>
+            <Text color={textColor}>Mgerine, Tunisia</Text>
           </HStack>
 
 

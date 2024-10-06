@@ -1,4 +1,4 @@
-import { Box, Text, Button, useColorMode, IconButton, Avatar, Flex } from "@chakra-ui/react";
+import {  Text, Button, useColorMode, IconButton, Avatar, Flex } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
