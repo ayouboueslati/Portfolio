@@ -1,15 +1,12 @@
-import {
-  Flex,
-  Text,
-  Button,
-  Box,
-  useColorMode,
-
-  Progress
-} from "@chakra-ui/react";
+import {Flex,Text,Button,Box,useColorMode,Container,Stack,IconButton,Divider} from "@chakra-ui/react";
 import { Image } from "@nextui-org/react";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import Skills from "./programming_skills";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import Link from "next/link";
+
 
 const techCards = [
   { title: "Web", languages: ["PHP", "Symfony", "Next.js"], imagePath: "web.jfif" },
@@ -17,11 +14,7 @@ const techCards = [
   { title: "Web3.0", languages: ["Solidity"], imagePath: "blockchain.jpg" },
 ];
 
-const projects = [
-  { title: "Project One", description: "Brief description of project one.", imagePath: "iqraa.jpg", link: "https://example.com" },
-  { title: "Project Two", description: "Brief description of project two.", imagePath: "FootballLogo.jpg", link: "https://example.com" },
-  // Add more projects as needed
-];
+
 
 const testimonials = [
   { name: "John Doe", feedback: "Ayoub is a great developer!", role: "Former Mentor" },
@@ -29,18 +22,18 @@ const testimonials = [
   // Add more testimonials as needed
 ];
 
-const skills = [
-  { skill: "Flutter", level: 90 },
-  { skill: "Koltin", level: 85 },
-  { skill: "SwiftUi", level: 75 },
-  { skill: "NodeJs", level: 65 },
-  { skill: "NextJs", level: 45 },
-  // Add more skills as needed
-];
+
 
 const TechCard = ({ title, languages, imagePath }: { title: string; languages: string[]; imagePath: string; }) => {
   const { colorMode } = useColorMode();
   const textColor = colorMode === 'light' ? 'black' : 'white';
+  const router = useRouter();
+
+  const handleViewProjects = () => {
+    router.push(`/projects?tech=${title.toLowerCase()}`);
+  };
+
+
 
   return (
     <Card
@@ -71,7 +64,7 @@ const TechCard = ({ title, languages, imagePath }: { title: string; languages: s
           </Flex>
         </Box>
         <Button
-          onClick={() => {/* Logic to open modal or navigate */}}
+          onClick={handleViewProjects}  // Changed this line
           colorScheme="teal"
           size="sm"
           mt={2}
@@ -99,29 +92,47 @@ const TestimonialsSection = () => (
   </Box>
 );
 
-const SkillsSection = () => (
-  <Box mt={12}>
-    <Text fontSize="3xl" fontWeight="bold">Skills</Text>
-    {skills.map((skill, index) => (
-      <Box key={index} mb={4}>
-        <Text>{skill.skill}</Text>
-        <Progress value={skill.level} />
-      </Box>
-    ))}
-  </Box>
-);
 
-const ContactSection = () => (
-  <Box mt={12}>
-    <Text fontSize="3xl" fontWeight="bold">Contact Me</Text>
-    <Text>If you'd like to get in touch, feel free to reach out!</Text>
-    <Button colorScheme="teal" mt={4}>Contact Me</Button>
-  </Box>
-);
+const ContactSection = () => {
+  const router = useRouter();
+
+  const handleContactPage = () => {
+    router.push("/contacts");
+  };
+
+  return (
+    <Box mt={12}>
+      <Text fontSize="3xl" fontWeight="bold">Contact Me</Text>
+      <Text>If you'd like to get in touch, feel free to reach out!</Text>
+      <Button 
+        colorScheme="teal" 
+        mt={4}
+        onClick={handleContactPage}>
+          Contact Me
+      </Button>
+    </Box>
+  );
+};
 
 const Footer = () => (
-  <Box as="footer" mt={12} py={4} textAlign="center" backgroundColor="gray.800" color="white">
-    <Text>&copy; 2024 Ayoub Oueslati. All rights reserved.</Text>
+  <Box as="footer" bg="gray.900" color="gray.200" mt={12}>
+    <Container maxW="container.xl" py={8}>
+      <Stack direction={["column", "row"]} spacing={8} justify="space-between" align="center">
+        <Box>
+          <Text fontSize="xl" fontWeight="bold" mb={2}>Ayoub Oueslati</Text>
+          <Text fontSize="sm">Passionate developer crafting innovative solutions</Text>
+        </Box>
+        <Stack direction="row" spacing={4}>
+          <IconButton as={Link} href="https://github.com/ayouboueslati" aria-label="GitHub" icon={<FaGithub />} variant="ghost" />
+          <IconButton as={Link} href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" aria-label="LinkedIn" icon={<FaLinkedin />} variant="ghost" />
+          <IconButton as={Link} href="https://twitter.com/yourusername" aria-label="Twitter" icon={<FaTwitter />} variant="ghost" />
+        </Stack>
+      </Stack>
+      <Divider my={6} borderColor="gray.700" />
+      <Text textAlign="center" fontSize="sm">
+        &copy; {new Date().getFullYear()} Ayoub Oueslati. All rights reserved.
+      </Text>
+    </Container>
   </Box>
 );
 
@@ -172,8 +183,8 @@ const Home = () => {
               <Image
                 src="ayoub.jpg"
                 alt="Ayoub Oueslati"
-                width={256}
-                height={256}
+                width={500}
+                height={500}
                 className="object-cover w-full h-full"
               />
             </Box>
@@ -208,8 +219,15 @@ const Home = () => {
         {/* Testimonials Section */}
         <TestimonialsSection />
 
-        {/* Skills Section */}
-        <SkillsSection />
+
+
+       {/* Skills Section */}
+<Box mt={12}>
+  <Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={4}>Skills</Text>
+  <Skills />
+</Box>
+
+
 
         {/* Contact Section */}
         <ContactSection />

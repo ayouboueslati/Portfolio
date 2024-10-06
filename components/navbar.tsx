@@ -13,19 +13,23 @@ export default function Navbar() {
       bg={colorMode === "light" ? "white" : "gray.800"}
       color={colorMode === "light" ? "black" : "white"}
     >
-      <Flex
-        align="center"
-        justify={{ base: "center", md: "start" }}
-      >
-        <Avatar
-          name="Ayoub Oueslati"
-          src="/ayoub.jpg"
-          size="sm"
-        />
-        <Text fontSize="lg" ml={2}>
-          Software Engineer
-        </Text>
-      </Flex>
+ <Flex
+  align="center"
+  justify={{ base: "center", md: "start" }}
+>
+  <Link href="/" passHref>
+    <Flex align="center" cursor="pointer">
+      <Avatar
+        name="Ayoub Oueslati"
+        src="/ayoub.jpg"
+        size="sm"
+      />
+      <Text fontSize="lg" ml={2}>
+        Software Engineer
+      </Text>
+    </Flex>
+  </Link>
+</Flex>
 
       <Flex
         align="center"
@@ -44,16 +48,19 @@ export default function Navbar() {
             Projects
           </Button>
         </Link>
-        <Link href="/contact" passHref>
-          <Button
-            as="a"
-            variant="ghost"
-            colorScheme={colorMode === "light" ? "blue" : "yellow"}
-            mb={{ base: 2, md: 0 }}
-          >
-            Contact
-          </Button>
-        </Link>
+        
+        <Link href="/contacts" passHref>
+  <Button
+    as="a"
+    variant="ghost"
+    colorScheme={colorMode === "light" ? "blue" : "yellow"}
+    mb={{ base: 2, md: 0 }}
+  >
+    Contact
+  </Button>
+</Link>
+
+
         <IconButton
           aria-label="Toggle theme"
           icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
