@@ -2,7 +2,6 @@ import { Box, VStack, HStack, Text, useColorModeValue, Container, Image, SimpleG
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaQuoteLeft, FaTrophy, FaUsers, FaGlobe, FaAward } from "react-icons/fa";
 import CountUp from "react-countup";
 import { useInView } from 'react-intersection-observer';
-import {Emoji} from 'emoji-mart';
 
 
 export default function AboutUs() {

@@ -1,6 +1,6 @@
 import {Flex,Text,Button,Box,useColorMode,Container,Stack,IconButton,Divider} from "@chakra-ui/react";
 import { Image } from "@nextui-org/react";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card,  CardBody,  } from "@nextui-org/card";
 import { useRouter } from "next/router";
 import Skills from "./programming_skills";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
