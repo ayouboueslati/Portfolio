@@ -13,11 +13,11 @@ const techCards = [
   { title: "Web3.0", languages: ["Solidity"], imagePath: "blockchain.jpg" },
 ];
 
+ 
 
 
 
-
-
+ 
 
 const TechCard = ({ title, languages, imagePath }: { title: string; languages: string[]; imagePath: string; }) => {
   const { colorMode } = useColorMode();
@@ -28,45 +28,46 @@ const TechCard = ({ title, languages, imagePath }: { title: string; languages: s
     router.push(`/projects?tech=${title.toLowerCase()}`);
   };
 
-
-
   return (
     <Card
-      className="py-4 h-[300px] cursor-pointer transition-transform duration-300 transform hover:scale-105"
+      className="h-full cursor-pointer transition-transform duration-300 transform hover:scale-105"
       style={{ boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
-      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <Text className="font-bold text-lg transition-colors duration-300 hover:text-accent" color={textColor}>
-          {title}
-        </Text>
-      </CardHeader>
-      <CardBody className="overflow-hidden py-2">
+      <CardBody className="p-0 relative h-full">
         <Image
           alt="Card background"
-          className="object-cover rounded-xl w-full h-full transition-transform duration-500 hover:scale-110"
+          className="object-cover w-full h-full"
           src={imagePath}
         />
-      </CardBody>
-      <CardFooter>
-        <Box>
-          <Text color={textColor} fontSize="sm" className="font-semibold">Languages:</Text>
-          <Flex wrap="wrap" gap={5}>
-            {languages.map((lang, index) => (
-              <Box key={index} className="bg-gray-200 rounded-full px-2 py-1" color="black">
-                {lang}
-              </Box>
-            ))}
-          </Flex>
+        <Box
+          className="absolute inset-0 bg-gradient-to-t from-black to-transparent"
+          style={{ opacity: 0.7 }}
+        />
+        <Box className="absolute inset-0 p-4 flex flex-col justify-between">
+          <Text className="font-bold text-2xl text-white">
+            {title}
+          </Text>
+          <Box>
+            <Text color="white" fontSize="sm" className="font-semibold mb-2">Languages:</Text>
+            <Flex wrap="wrap" gap={2}>
+              {languages.map((lang, index) => (
+                <Box key={index} className="bg-white bg-opacity-20 rounded-full px-2 py-1 text-xs text-white">
+                  {lang}
+                </Box>
+              ))}
+            </Flex>
+            <Button
+              onClick={handleViewProjects}
+              colorScheme="teal"
+              size="sm"
+              width="full"
+              mt={4}
+            >
+              View Projects
+            </Button>
+          </Box>
         </Box>
-        <Button
-          onClick={handleViewProjects}  // Changed this line
-          colorScheme="teal"
-          size="sm"
-          mt={2}
-        >
-          View Projects
-        </Button>
-      </CardFooter>
+      </CardBody>
     </Card>
   );
 };
@@ -88,7 +89,7 @@ const ContactSection = () => {
       <Text fontSize="3xl" fontWeight="bold" color={colorMode === 'light' ? 'gray.800' : 'white'}>
         Contact Me
       </Text>
-      <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}>
+      <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}  fontStyle={"italic"} fontWeight={"bold"} fontSize={"2xl"}>
         If you d like to get in touch, feel free to reach out!
       </Text>
       <Button
@@ -103,25 +104,59 @@ const ContactSection = () => {
 };
 
 const Footer = () => (
-  <Box as="footer" bg="gray.900" color="gray.200" mt={12}>
-    <Container maxW="container.xl" py={8}>
-      <Stack direction={["column", "row"]} spacing={8} justify="space-between" align="center">
+  <Box
+    as="footer"
+    bg="gray.900"
+    color="gray.200"
+    width="100%"
+    mt={12}
+    py={6} // Added padding for top and bottom
+  >
+    <Container maxW="container.xl">
+      <Stack
+        direction={["column", "row"]}
+        spacing={8}
+        justify="space-between"
+        align="center"
+        textAlign={["center", "left"]} // Center text on smaller screens
+      >
         <Box>
-          <Text fontSize="xl" fontWeight="bold" mb={2}>Ayoub Oueslati</Text>
-          <Text fontSize="sm">Passionate developer crafting innovative solutions</Text>
+          <Text fontSize="xl" fontWeight="bold" mb={2}>
+            Ayoub Oueslati
+          </Text>
+          <Text fontSize="md" fontWeight="medium" color="gray.400">
+            Software Engineering Student
+          </Text>
         </Box>
         <Stack direction="row" spacing={4}>
-          <IconButton as={Link} href="https://github.com/ayouboueslati" aria-label="GitHub" icon={<FaGithub />} variant="ghost" />
-          <IconButton as={Link} href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" aria-label="LinkedIn" icon={<FaLinkedin />} variant="ghost" />
+          <IconButton
+            as={Link}
+            href="https://github.com/ayouboueslati"
+            aria-label="GitHub"
+            icon={<FaGithub />}
+            variant="ghost"
+            color="gray.200" // Maintain the color for the icon
+            _hover={{ color: "gray.100" }} // Change color on hover
+          />
+          <IconButton
+            as={Link}
+            href="https://www.linkedin.com/in/ayoub-weslati-73b697202/"
+            aria-label="LinkedIn"
+            icon={<FaLinkedin />}
+            variant="ghost"
+            color="gray.200" // Maintain the color for the icon
+            _hover={{ color: "gray.100" }} // Change color on hover
+          />
         </Stack>
       </Stack>
-      <Divider my={6} borderColor="gray.700" />
-      <Text textAlign="center" fontSize="sm">
+      <Divider my={4} borderColor="gray.700" />
+      <Text textAlign="center" fontStyle={"italic"} fontWeight={"bold"} fontSize={"md"}>
         &copy; {new Date().getFullYear()} Ayoub Oueslati. All rights reserved.
       </Text>
     </Container>
   </Box>
 );
+
 
 const Home = () => {
   const { colorMode } = useColorMode();
@@ -137,29 +172,60 @@ const Home = () => {
               <span className="text-accent">Ayoub Oueslati</span>
             </h1>
 
-            <Text className="font-family" color={colorMode === 'light' ? 'gray.800' : 'white'}>
+            <Text className="font-family" color={colorMode === 'light' ? 'gray.800' : 'white'} fontStyle={"italic"} fontWeight={"bold"} fontSize={"2xl"}>
             I am a Software Engineering student specializing in mobile app development. I create intuitive and engaging applications using Flutter and Dart, focusing on user-friendly interfaces and seamless functionality. Explore my work to see how I blend creativity with technical expertise!            </Text>
 
             {/* Download CV Button */}
-            <Flex alignItems="center" gap={8} mt={4}>
-              <a href="AyoubOueslati.pdf" download="Ayoub_cv.pdf">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  colorScheme={colorMode === 'light' ? 'blue' : 'yellow'}
-                >
-                  Download CV
-                </Button>
-              </a>
-              <Flex gap={4}>
-                <a href="https://github.com/ayouboueslati" target="_blank" rel="noopener noreferrer">
-                  <Text fontSize="xl" color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}>GitHub</Text>
-                </a>
-                <a href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" target="_blank" rel="noopener noreferrer">
-                  <Text fontSize="xl" color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}>LinkedIn</Text>
-                </a>
-              </Flex>
-            </Flex>
+           {/* Download CV Button */}
+<Flex alignItems="center" gap={8} mt={4}>
+  <a href="AyoubOueslati.pdf" download="Ayoub_cv.pdf">
+    <Button
+      variant="solid"  // Changed to 'solid' for a more prominent button
+      size="lg"
+      colorScheme={colorMode === 'light' ? 'blue' : 'yellow'}
+      borderRadius="full"  // Full border-radius for a pill-shaped button
+      boxShadow="lg"       // Added shadow for depth
+      _hover={{
+        transform: "translateY(-2px)", // Slight lift effect on hover
+        boxShadow: "xl",               // More pronounced shadow on hover
+      }}
+    >
+      Download CV
+    </Button>
+  </a>
+
+  <Flex gap={4}>
+    <a href="https://github.com/ayouboueslati" target="_blank" rel="noopener noreferrer">
+      <Text
+        fontSize="xl"
+        fontWeight="bold"   // Bolder text for prominence
+        color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}
+        _hover={{
+          color: colorMode === 'light' ? 'blue.800' : 'yellow.400',  // Darker color on hover
+          textDecoration: "underline",  // Underline for emphasis
+          transform: "scale(1.05)",      // Slight zoom effect on hover
+        }}
+      >
+        GitHub
+      </Text>
+    </a>
+    <a href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" target="_blank" rel="noopener noreferrer">
+      <Text
+        fontSize="xl"
+        fontWeight="bold"   // Consistent bold styling
+        color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}
+        _hover={{
+          color: colorMode === 'light' ? 'blue.800' : 'yellow.400',
+          textDecoration: "underline",
+          transform: "scale(1.05)",
+        }}
+      >
+        LinkedIn
+      </Text>
+    </a>
+  </Flex>
+</Flex>
+
           </div>
 
           {/* Profile Image */}
@@ -185,7 +251,9 @@ const Home = () => {
             fontFamily="'Montserrat', sans-serif"
             textTransform="uppercase"
             letterSpacing="wide"
+            fontStyle={"italic"}
           >
+
             Technologies
           </Text>
         </Box>
@@ -202,7 +270,7 @@ const Home = () => {
 
        {/* Skills Section */}
 <Box mt={12}>
-  <Text fontSize="3xl" fontWeight="bold" textAlign="center" mb={4}>Skills</Text>
+  <Text fontSize="3xl" fontStyle={'italic'} fontWeight="bold" textAlign="center" mb={4}>Skills</Text>
   <Skills />
 </Box>
 

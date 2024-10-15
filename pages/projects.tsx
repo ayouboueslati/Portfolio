@@ -1,159 +1,142 @@
-import { useState, useEffect } from 'react';
-import {  Text, Flex, Button, Container, useColorMode, Select, Skeleton} from "@chakra-ui/react";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
-import { useRouter } from 'next/router';
-import projects from '../data/projectsData.js';
-import { GetServerSidePropsContext } from 'next/types';
+import React, { useEffect, useState } from 'react';
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Box,
+  useColorMode,
+  useTheme,
+  Skeleton,
+  Text,
+  Flex,
+} from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import projects from '../data/projectsData';
 
-interface Project {
-  title: string;
-  description: string;
-  imagePath: string;
-  technology: string;
-}
+const cardVariants = {
+  initial: { scale: 0.95, opacity: 0.8 },
+  animate: { scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 100, damping: 15 } },
+};
 
-const ProjectsPage = ({ initialProjects, initialTech }: { initialProjects: Project[]; initialTech: string | null }) => {
+const ResponsiveProjectsTabs = () => {
   const { colorMode } = useColorMode();
-  const router = useRouter();
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>(initialProjects);
-  const [selectedTech, setSelectedTech] = useState<string | null>(initialTech);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true); // Add a loading state
-  const projectsPerPage = 1;
+  const theme = useTheme();
+  const [loading, setLoading] = useState(true);
 
-  const technologies = Array.from(new Set(initialProjects.map(project => project.technology)));
+  const bgColor = colorMode === 'light' ? '#F4F4F9' : '#1E2025';
+  const cardBgColor = colorMode === 'light' ? '#E8E8F1' : '#2C2F36';
+  const textColor = colorMode === 'light' ? '#333' : '#EAEAEA';
+  const titleColor = colorMode === 'light' ? '#FF6347' : '#FF6B6B';
+  const hoverBgColor = colorMode === 'light' ? '#FFDDC1' : '#444B53';
+ 
+  const borderRadius = '12px';
+  const shadowEffect = '0 4px 8px rgba(0, 0, 0, 0.1)';
 
   useEffect(() => {
-    // Simulate data fetching
-    setTimeout(() => {
-      setIsLoading(false); // Set loading to false after fetching
-    }, 2000); // Simulate a 2-second data fetching delay
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Filter projects based on selected technology
-  useEffect(() => {
-    if (selectedTech) {
-      setFilteredProjects(initialProjects.filter(project => project.technology.toLowerCase() === selectedTech.toLowerCase()));
-    } else {
-      setFilteredProjects(initialProjects);
-    }
-  }, [selectedTech, initialProjects]);
-
-  // Pagination Logic
-  const indexOfLastProject = currentPage * projectsPerPage;
-  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-  const currentProjects = filteredProjects.slice(indexOfFirstProject, indexOfLastProject);
-
-  const handleTechChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newTech = event.target.value;
-    setSelectedTech(newTech);
-    setCurrentPage(1);
-    router.push({
-      pathname: '/projects',
-      query: newTech ? { tech: newTech } : {},
-    }, undefined, { shallow: true });
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < Math.ceil(filteredProjects.length / projectsPerPage)) {
-      setCurrentPage(prev => prev + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
-    }
-  };
-
   return (
-    <Container maxW="container.xl" py={10}>
-      <Flex justifyContent="space-between" alignItems="center" mb={8}>
-        <Text fontSize="5xl" fontWeight="bold" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-          Projects {selectedTech ? `- ${selectedTech}` : ""}
-        </Text>
-        <Select placeholder="Filter by technology" value={selectedTech || ''} onChange={handleTechChange} width="200px">
-          <option value="">All</option>
-          {technologies.map((tech) => (
-            <option key={tech} value={tech}>{tech}</option>
+    <div className="container mx-auto py-6 px-4">
+      <Tabs orientation="horizontal" colorScheme={colorMode === 'light' ? 'orange' : 'teal'}>
+        <TabList
+          style={{
+            display: 'flex',
+            overflowX: 'auto', // Allow horizontal scrolling
+            padding: '16px',
+            marginBottom: '24px',
+            gap: '16px',
+            justifyContent: 'center',
+          }}
+        >
+          {projects.map((project, index) => (
+            <Tab
+              key={index}
+              className="p-4 rounded-xl bg-opacity-90 hover:bg-opacity-100 transition-all duration-300"
+              style={{
+                backgroundColor: cardBgColor,
+                borderRadius,
+                boxShadow: shadowEffect,
+                border: 'none',
+                flex: '0 0 auto', // Ensure tabs maintain their width
+                minWidth: '150px', // Adjust this value as needed
+                maxWidth: '200px', // Adjust this value as needed
+              }}
+              _selected={{
+                background: hoverBgColor,
+                boxShadow: '0 10px 20px rgba(255, 99, 71, 0.2)',
+              }}
+            >
+              <motion.div
+                initial="initial"
+                animate="animate"
+                variants={cardVariants}
+              >
+                <div className="text-center">
+                  {loading ? (
+                    <Skeleton height="22px" width="120px" mb={3} />
+                  ) : (
+                    <h3 className="text-lg font-semibold" style={{ color: titleColor }}>
+                      {project.title}
+                    </h3>
+                  )}
+                </div>
+              </motion.div>
+            </Tab>
           ))}
-        </Select>
-      </Flex>
+        </TabList>
 
-      <Flex wrap="wrap" justify="center" gap={8}>
-        {isLoading ? (
-          // Display skeletons when loading
-          Array.from({ length: projectsPerPage }).map((_, index) => (
-            <Flex key={index} w="100%" justify="space-between" alignItems="center">
-              <Skeleton height="200px" width="50%" borderRadius="10px" />
-              <Skeleton height="250px" width="45%" borderRadius="10px" />
-            </Flex>
-          ))
-        ) : (
-          // Display actual content when not loading
-          currentProjects.map((project: Project, index: number) => (
-            <Flex key={index} w="100%" justify="space-between" alignItems="center">
-              {/* Left side: Number, Title, Description, Technology */}
-              <Card className="py-4" style={{ width: "50%", height: "auto" }}>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                  <Text className="font-bold text-3xl mb-2" fontFamily="Great Vibes" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-                    {String(indexOfFirstProject + index + 1).padStart(2, '0')} {/* Number formatted as 01, 02, etc */}
-                  </Text>
-                  
-                  <Text className="font-bold text-5xl mb-2" fontFamily="BebasNeue-Regular" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-                    {project.title} {/* Only project name here */}
-                  </Text>
-
-                  <Text fontSize="md" lineHeight="tall" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-                    {project.description}
-                  </Text>
-
-                  <Text mt={4} className="text-sm uppercase font-bold text-teal-500 mb-2">
-                    {project.technology}
-                  </Text>
-                </CardHeader>
-              </Card>
-
-              {/* Right side: Project Image */}
-              <Card className="py-4" style={{ width: "45%", height: "auto" }}>
-                <CardBody className="overflow-visible py-2">
-                  <Image alt={project.title} className="object-cover rounded-xl" src={project.imagePath} width={370} height={250} />
-                </CardBody>
-              </Card>
-            </Flex>
-          ))
-        )}
-      </Flex>
-
-      {/* Pagination controls */}
-      <Flex justify="center" mt={8} gap={4}>
-        <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
-          Previous
-        </Button>
-        <Button onClick={handleNextPage} isDisabled={currentPage === Math.ceil(filteredProjects.length / projectsPerPage)}>
-          Next
-        </Button>
-      </Flex>
-    </Container>
+        <TabPanels className="w-full mt-6">
+          {projects.map((project, index) => (
+            <TabPanel key={index}>
+              <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
+                <Box flex={1}>
+                  {loading ? (
+                    <Skeleton height="300px" borderRadius={borderRadius} />
+                  ) : (
+                    <motion.img
+                      src={project.imagePath}
+                      alt={project.title}
+                      className="w-full h-auto rounded-lg shadow-lg object-cover"
+                      style={{ boxShadow: shadowEffect }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
+                    />
+                  )}
+                </Box>
+                <Box flex={1}>
+                  {loading ? (
+                    <>
+                      <Skeleton height="24px" width="80%" mb={4} />
+                      <Skeleton height="18px" width="100%" mb={2} />
+                      <Skeleton height="18px" width="90%" mb={2} />
+                      <Skeleton height="18px" width="95%" />
+                    </>
+                  ) : (
+                    <>
+                      <Text fontSize="xx-large" fontWeight="extrabold" color={titleColor} mb={4}>
+                        {project.title}
+                      </Text>
+                      <Text color={textColor} fontSize={'larger'} fontStyle={'italic'} mb={4}>
+                        {project.description}
+                      </Text>
+                      <Text mt={4} fontWeight="semibold" color={titleColor} fontSize={'larger'}>
+                        Technology: {project.technology}
+                      </Text>
+                    </>
+                  )}
+                </Box>
+              </Flex>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </div>
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { tech } = context.query;
-
-  let filteredProjects;
-  if (tech && typeof tech === 'string') {
-    filteredProjects = projects.filter(project => project.technology.toLowerCase() === tech.toLowerCase());
-  } else {
-    filteredProjects = projects;
-  }
-
-  return {
-    props: {
-      initialProjects: filteredProjects,
-      initialTech: tech || null,
-    },
-  };
-}
-
-export default ProjectsPage;
+export default ResponsiveProjectsTabs;
