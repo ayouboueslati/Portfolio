@@ -20,8 +20,6 @@ const techCards = [
  
 
 const TechCard = ({ title, languages, imagePath }: { title: string; languages: string[]; imagePath: string; }) => {
-  const { colorMode } = useColorMode();
-  const textColor = colorMode === 'light' ? 'black' : 'white';
   const router = useRouter();
 
   const handleViewProjects = () => {

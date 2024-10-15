@@ -22,10 +22,8 @@ const cardVariants = {
 
 const ResponsiveProjectsTabs = () => {
   const { colorMode } = useColorMode();
-  const theme = useTheme();
   const [loading, setLoading] = useState(true);
 
-  const bgColor = colorMode === 'light' ? '#F4F4F9' : '#1E2025';
   const cardBgColor = colorMode === 'light' ? '#E8E8F1' : '#2C2F36';
   const textColor = colorMode === 'light' ? '#333' : '#EAEAEA';
   const titleColor = colorMode === 'light' ? '#FF6347' : '#FF6B6B';

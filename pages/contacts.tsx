@@ -1,4 +1,4 @@
-import { Box, VStack, HStack, Text, useColorModeValue, Container, Image, SimpleGrid, Icon, Divider, Card,Flex } from "@chakra-ui/react";
+import { Box, VStack, HStack, Text, useColorModeValue, Container, Image, SimpleGrid, Icon, Divider,Flex } from "@chakra-ui/react";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaQuoteLeft, FaTrophy, FaUsers, FaGlobe, FaAward } from "react-icons/fa";
 import CountUp from "react-countup";
 import { useInView } from 'react-intersection-observer';
@@ -60,7 +60,7 @@ export default function AboutUs() {
               <HStack spacing={4}>
                 <Icon as={FaQuoteLeft} color={accentColor} boxSize={8} />
                 <Text fontStyle="italic" color={textColor}  fontWeight={"semibold"} fontSize={"2xl"}>
-                  "Innovation is not just about ideas, it's about making ideas happen."
+                  Innovation is not just about ideas,  it s about making ideas happen.
                 </Text>
               </HStack>
             </VStack>
