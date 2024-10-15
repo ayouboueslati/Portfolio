@@ -7,7 +7,6 @@ import {
   TabPanel,
   Box,
   useColorMode,
-  useTheme,
   Skeleton,
   Text,
   Flex,
