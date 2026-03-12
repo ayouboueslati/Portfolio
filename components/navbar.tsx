@@ -1,90 +1,69 @@
-import { Text, Button, useColorMode, IconButton, Avatar, Flex, Box, useDisclosure } from "@chakra-ui/react";
-import { SunIcon, MoonIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import Link from "next/link";
+import { Link } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+
+const links = [
+  { label: 'About', href: '/#about' },
+  { label: 'Experience', href: '/#experience' },
+  { label: 'Skills', href: '/#skills' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Contact', href: '/#contact' },
+];
 
 export default function Navbar() {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const { isOpen, onToggle } = useDisclosure();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
 
   return (
-    <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="100%"
-      p={4}
-      bg={colorMode === "light" ? "#F0F4F8" : "#2D3748"} // Light Gray-Blue for light mode, Charcoal for dark mode
-      color={colorMode === "light" ? "#2D3748" : "#F7FAFC"} // Charcoal text for light mode, Light Gray for dark mode
-    >
-      <Flex align="center">
-        <Link href="/" passHref>
-          <Flex align="center" cursor="pointer">
-            <Avatar name="Ayoub Oueslati" src="/ayoub.jpg" size="sm" />
-            <Text fontSize="lg" ml={2} display={{ base: "none", md: "block" }} fontStyle={"italic"} fontWeight={"bold"} >
-              Software Engineer
-            </Text>
-          </Flex>
+    <>
+      <nav className={`tl-nav${scrolled ? ' scrolled' : ''}`} role="navigation" aria-label="Main navigation">
+        {/* Logo */}
+        <Link href="/" className="tl-nav-logo" aria-label="Home">
+          AO
         </Link>
-      </Flex>
 
-      <Box display={{ base: "block", md: "none" }} onClick={onToggle}>
-        <IconButton
-          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-          variant="outline"
-          aria-label="Toggle Navigation"
-        />
-      </Box>
+        {/* Desktop links */}
+        <ul className="tl-nav-links" role="list">
+          {links.map((l) => (
+            <li key={l.href}>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
 
-      <Box
-        display={{ base: isOpen ? "block" : "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-      >
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          align={{ base: "center", md: "center" }}
-          justify={{ base: "center", md: "flex-end" }}
-          w="100%"
+        {/* Hamburger */}
+        <button
+          className="tl-nav-hamburger"
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
         >
-          <Link href="/projects" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              colorScheme={colorMode === "light" ? "blue" : "yellow"}
-              w={{ base: "full", md: "auto" }}
-              mb={{ base: 2, md: 0 }}
-              mr={{ base: 0, md: 4 }}
-              _hover={{ bg: colorMode === "light" ? "#63B3ED" : "#4A5568" }} // Hover effect
-              _active={{ bg: colorMode === "light" ? "#3182CE" : "#2D3748" }} // Active effect
-            >
-              Projects
-            </Button>
-          </Link>
-          <Link href="/contacts" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              colorScheme={colorMode === "light" ? "blue" : "yellow"}
-              w={{ base: "full", md: "auto" }}
-              mb={{ base: 2, md: 0 }}
-              mr={{ base: 0, md: 4 }}
-              _hover={{ bg: colorMode === "light" ? "#63B3ED" : "#4A5568" }} // Hover effect
-              _active={{ bg: colorMode === "light" ? "#3182CE" : "#2D3748" }} // Active effect
-            >
-              Contact
-            </Button>
-          </Link>
-          <IconButton
-            aria-label="Toggle theme"
-            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            onClick={toggleColorMode}
-            size="md"
-            colorScheme={colorMode === "light" ? "blue" : "yellow"} // Matching icon color with theme
-          />
-        </Flex>
-      </Box>
-    </Flex>
+          <span />
+          <span />
+          <span />
+        </button>
+      </nav>
+
+      {/* Mobile overlay */}
+      <div className={`tl-mobile-menu${menuOpen ? ' open' : ''}`} role="dialog" aria-modal="true">
+        <button
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+          style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'none', border: 'none', color: 'var(--muted)', fontSize: '1.2rem', cursor: 'none' }}
+        >
+          ✕
+        </button>
+        {links.map((l) => (
+          <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
+            {l.label}
+          </a>
+        ))}
+      </div>
+    </>
   );
 }

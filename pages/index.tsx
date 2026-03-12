@@ -1,287 +1,379 @@
-import {Flex,Text,Button,Box,useColorMode,Container,Stack,IconButton,Divider} from "@chakra-ui/react";
-import { Image } from "@nextui-org/react";
-import { Card,  CardBody,  } from "@nextui-org/card";
-import { useRouter } from "next/router";
-import Skills from "./programming_skills";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import Link from "next/link";
+import { useEffect, useRef } from 'react';
+import Head from 'next/head';
 
+/* ─── Data ─────────────────────────────────────────────── */
 
-const techCards = [
-  { title: "Web", languages: ["PHP", "Symfony", "Next.js"], imagePath: "web.jfif" },
-  { title: "Mobile", languages: ["Kotlin", "SwiftUI", "Flutter"], imagePath: "mobile.jpg" },
-  { title: "Web3.0", languages: ["Solidity"], imagePath: "blockchain.jpg" },
+const experienceData = [
+  {
+    date: 'Jan 2025 – Jul 2025',
+    role: 'Final Year Project',
+    company: 'Hendrik Thurau Enterprises, Switzerland',
+    desc: 'Booking & event management system using event sourcing, Kafka, AI recommender & Ionic.',
+  },
+  {
+    date: 'Jun 2024 – Sept 2024',
+    role: 'Mobile Developer Intern',
+    company: 'Tabaani Travel Agency, Tunisia',
+    desc: 'Flutter mobile app for travel booking and trip management with Node.js backend.',
+  },
+  {
+    date: 'Jun 2024 – Sept 2024',
+    role: 'Mobile Developer Intern',
+    company: 'SportDivers, Tunisia',
+    desc: 'Cross-platform app for a sports center: scheduling, payments, chat & dashboard.',
+  },
+  {
+    date: 'Aug 2021 – Sept 2021',
+    role: 'Intern',
+    company: 'Electronic Payment Department, Tunisia',
+    desc: 'Worked on electronic payment systems and optimization processes.',
+  },
 ];
 
- 
+const tickerItems = [
+  'Flutter', 'Kotlin', 'SwiftUI', 'Ionic', 'Next.js', 'Python', 'FastAPI',
+  'Node.js', 'Docker', 'Kafka', 'Git', 'Weaviate', 'PHP', 'Symfony',
+  '.NET', 'Jenkins', 'Vagrant', 'Zod', 'Figma',
+];
 
+const categories = [
+  { label: 'Mobile', items: ['Flutter', 'Kotlin', 'SwiftUI', 'Ionic'] },
+  { label: 'Web & Backend', items: ['Next.js', 'PHP', 'Symfony', '.NET', 'Node.js', 'Python', 'FastAPI'] },
+  { label: 'DevOps & Tools', items: ['Docker', 'Jenkins', 'Kafka', 'Git', 'Vagrant', 'Zod', 'Weaviate'] },
+  { label: 'Design', items: ['UI/UX Design', 'Figma'] },
+];
 
+const projects = [
+  {
+    index: '01',
+    name: 'Charge Tunisie',
+    tags: ['Web', 'Next.js', 'TypeScript'],
+    desc: 'Electric vehicle platform for the Tunisian market — catalog, charging map, dealership locator & test drive booking.',
+  },
+  {
+    index: '02',
+    name: 'The Chillery',
+    tags: ['Web', 'E-commerce', 'Freelance'],
+    desc: 'Premium e-commerce store for smoking accessories — Stripe payments, age verification & full admin dashboard.',
+  },
+  {
+    index: '03',
+    name: 'Nour Distribution',
+    tags: ['Web', 'B2B/B2C', 'Freelance'],
+    desc: 'African hair distribution platform — ordering, invoice generation, stock management & complete back office.',
+  },
+  {
+    index: '04',
+    name: 'Booking & Event System',
+    tags: ['Web', 'Mobile', 'Ionic', 'Kafka'],
+    desc: 'Event sourcing-based booking system for lake tours with AI recommendations and real-time reservation workflows.',
+  },
+  {
+    index: '05',
+    name: 'Job Finder – Renewable Energy',
+    tags: ['iOS', 'Android', 'Flutter'],
+    desc: 'Multi-platform job platform for the renewable energy sector — SwiftUI, Kotlin & Flutter dashboard.',
+  },
+  {
+    index: '06',
+    name: 'Iqraa – Spiritual Guide App',
+    tags: ['Mobile', 'Web', 'Blockchain'],
+    desc: 'Religious companion app with Flutter, VueJS, NodeJS, Python & Hedera blockchain.',
+  },
+  {
+    index: '07',
+    name: 'Artistic Avenue',
+    tags: ['Mobile', 'Web', 'Symfony'],
+    desc: 'Cross-platform platform for artists to display work and engage with audiences.',
+  },
+  {
+    index: '08',
+    name: 'DevOps CI/CD Pipeline',
+    tags: ['DevOps', 'Docker', 'Kubernetes'],
+    desc: 'Automated CI/CD pipeline with Spring Boot, Jenkins, SonarQube, Grafana & Kubernetes.',
+  },
+];
 
- 
+/* ─── Home Component ────────────────────────────────────── */
 
-const TechCard = ({ title, languages, imagePath }: { title: string; languages: string[]; imagePath: string; }) => {
-  const router = useRouter();
+export default function Home() {
+  const heroTerminalRef = useRef<HTMLSpanElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const heroArrowRef = useRef<HTMLAnchorElement>(null);
+  const heroTerminalWrapRef = useRef<HTMLDivElement>(null);
 
-  const handleViewProjects = () => {
-    router.push(`/projects?tech=${title.toLowerCase()}`);
+  /* Terminal typing animation + page reveal */
+  useEffect(() => {
+    const termEl = heroTerminalRef.current;
+    const contentEl = heroContentRef.current;
+    const arrowEl = heroArrowRef.current;
+    const wrapEl = heroTerminalWrapRef.current;
+    if (!termEl || !contentEl || !arrowEl || !wrapEl) return;
+
+    const text = '> Ayoub Oueslati_';
+    let i = 0;
+    wrapEl.classList.add('active');
+
+    const interval = setInterval(() => {
+      termEl.textContent = text.slice(0, i + 1);
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        // blink for 600ms then fade in content
+        setTimeout(() => {
+          contentEl.classList.add('loaded');
+          arrowEl.classList.add('loaded');
+        }, 600);
+      }
+    }, 55);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  /* IntersectionObserver for scroll reveals */
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    els.forEach((el, i) => {
+      (el as HTMLElement).style.transitionDelay = `${(i % 5) * 100}ms`;
+      io.observe(el);
+    });
+
+    return () => io.disconnect();
+  }, []);
+
+  /* Email copy */
+  const copyEmail = () => {
+    navigator.clipboard.writeText('ayoubweslati00@gmail.com').catch(() => { });
+    const tooltip = document.getElementById('copied-tooltip');
+    if (!tooltip) return;
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.remove('show'), 2000);
   };
 
   return (
-    <Card
-      className="h-full cursor-pointer transition-transform duration-300 transform hover:scale-105"
-      style={{ boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)" }}
-    >
-      <CardBody className="p-0 relative h-full">
-        <Image
-          alt="Card background"
-          className="object-cover w-full h-full"
-          src={imagePath}
-        />
-        <Box
-          className="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-          style={{ opacity: 0.7 }}
-        />
-        <Box className="absolute inset-0 p-4 flex flex-col justify-between">
-          <Text className="font-bold text-2xl text-white">
-            {title}
-          </Text>
-          <Box>
-            <Text color="white" fontSize="sm" className="font-semibold mb-2">Languages:</Text>
-            <Flex wrap="wrap" gap={2}>
-              {languages.map((lang, index) => (
-                <Box key={index} className="bg-white bg-opacity-20 rounded-full px-2 py-1 text-xs text-white">
-                  {lang}
-                </Box>
-              ))}
-            </Flex>
-            <Button
-              onClick={handleViewProjects}
-              colorScheme="teal"
-              size="sm"
-              width="full"
-              mt={4}
-            >
-              View Projects
-            </Button>
-          </Box>
-        </Box>
-      </CardBody>
-    </Card>
-  );
-};
+    <>
+      <Head>
+        <title>Ayoub Oueslati — Software Engineer</title>
+        <meta name="description" content="Portfolio of Ayoub Oueslati, Software Engineer specialising in mobile & web development." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
 
+      <main>
+        {/* ═══════ HERO ═══════ */}
+        <section className="hero-section" aria-label="Hero">
+          <div className="hero-bg" aria-hidden="true" />
 
-
-
-
-const ContactSection = () => {
-  const router = useRouter();
-  const { colorMode } = useColorMode();
-
-  const handleContactPage = () => {
-    router.push("/contacts");
-  };
-
-  return (
-    <Box mt={12}>
-      <Text fontSize="3xl" fontWeight="bold" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-        Contact Me
-      </Text>
-      <Text color={colorMode === 'light' ? 'gray.600' : 'gray.300'}  fontStyle={"italic"} fontWeight={"bold"} fontSize={"2xl"}>
-        If you d like to get in touch, feel free to reach out!
-      </Text>
-      <Button
-        colorScheme="teal"
-        mt={4}
-        onClick={handleContactPage}
-      >
-        Contact Me
-      </Button>
-    </Box>
-  );
-};
-
-const Footer = () => (
-  <Box
-    as="footer"
-    bg="gray.900"
-    color="gray.200"
-    width="100%"
-    mt={12}
-    py={6} // Added padding for top and bottom
-  >
-    <Container maxW="container.xl">
-      <Stack
-        direction={["column", "row"]}
-        spacing={8}
-        justify="space-between"
-        align="center"
-        textAlign={["center", "left"]} // Center text on smaller screens
-      >
-        <Box>
-          <Text fontSize="xl" fontWeight="bold" mb={2}>
-            Ayoub Oueslati
-          </Text>
-          <Text fontSize="md" fontWeight="medium" color="gray.400">
-            Software Engineering Student
-          </Text>
-        </Box>
-        <Stack direction="row" spacing={4}>
-          <IconButton
-            as={Link}
-            href="https://github.com/ayouboueslati"
-            aria-label="GitHub"
-            icon={<FaGithub />}
-            variant="ghost"
-            color="gray.200" // Maintain the color for the icon
-            _hover={{ color: "gray.100" }} // Change color on hover
-          />
-          <IconButton
-            as={Link}
-            href="https://www.linkedin.com/in/ayoub-weslati-73b697202/"
-            aria-label="LinkedIn"
-            icon={<FaLinkedin />}
-            variant="ghost"
-            color="gray.200" // Maintain the color for the icon
-            _hover={{ color: "gray.100" }} // Change color on hover
-          />
-        </Stack>
-      </Stack>
-      <Divider my={4} borderColor="gray.700" />
-      <Text textAlign="center" fontStyle={"italic"} fontWeight={"bold"} fontSize={"md"}>
-        &copy; {new Date().getFullYear()} Ayoub Oueslati. All rights reserved.
-      </Text>
-    </Container>
-  </Box>
-);
-
-
-const Home = () => {
-  const { colorMode } = useColorMode();
-
-  return (
-    <section className={`relative h-full`}>
-      <div className="container mx-auto h-full">
-        <div className="flex flex-col xl:flex-row items-center justify-between xl:pt-8 xl:pb-24">
-          {/* Text Section */}
-          <div className="text-center xl:text-left xl:w-1/2" color={colorMode === 'light' ? 'gray.800' : 'white'}>
-            <h1 className={`h1 mb-6 ${colorMode === 'light' ? 'text-gray-800' : 'text-white'}`}>
-              Hello I m<br />
-              <span className="text-accent">Ayoub Oueslati</span>
-            </h1>
-
-            <Text className="font-family" color={colorMode === 'light' ? 'gray.800' : 'white'} fontStyle={"italic"} fontWeight={"bold"} fontSize={"2xl"}>
-            I am a Software Engineering student specializing in mobile app development. I create intuitive and engaging applications using Flutter and Dart, focusing on user-friendly interfaces and seamless functionality. Explore my work to see how I blend creativity with technical expertise!            </Text>
-
-            {/* Download CV Button */}
-           {/* Download CV Button */}
-<Flex alignItems="center" gap={8} mt={4}>
-  <a href="AyoubOueslati.pdf" download="Ayoub_cv.pdf">
-    <Button
-      variant="solid"  // Changed to 'solid' for a more prominent button
-      size="lg"
-      colorScheme={colorMode === 'light' ? 'blue' : 'yellow'}
-      borderRadius="full"  // Full border-radius for a pill-shaped button
-      boxShadow="lg"       // Added shadow for depth
-      _hover={{
-        transform: "translateY(-2px)", // Slight lift effect on hover
-        boxShadow: "xl",               // More pronounced shadow on hover
-      }}
-    >
-      Download CV
-    </Button>
-  </a>
-
-  <Flex gap={4}>
-    <a href="https://github.com/ayouboueslati" target="_blank" rel="noopener noreferrer">
-      <Text
-        fontSize="xl"
-        fontWeight="bold"   // Bolder text for prominence
-        color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}
-        _hover={{
-          color: colorMode === 'light' ? 'blue.800' : 'yellow.400',  // Darker color on hover
-          textDecoration: "underline",  // Underline for emphasis
-          transform: "scale(1.05)",      // Slight zoom effect on hover
-        }}
-      >
-        GitHub
-      </Text>
-    </a>
-    <a href="https://www.linkedin.com/in/ayoub-weslati-73b697202/" target="_blank" rel="noopener noreferrer">
-      <Text
-        fontSize="xl"
-        fontWeight="bold"   // Consistent bold styling
-        color={colorMode === 'light' ? 'blue.600' : 'yellow.200'}
-        _hover={{
-          color: colorMode === 'light' ? 'blue.800' : 'yellow.400',
-          textDecoration: "underline",
-          transform: "scale(1.05)",
-        }}
-      >
-        LinkedIn
-      </Text>
-    </a>
-  </Flex>
-</Flex>
-
+          {/* Terminal line */}
+          <div ref={heroTerminalWrapRef} className="hero-terminal" aria-hidden="true">
+            <span ref={heroTerminalRef} />
+            <span className="cursor-blink" />
           </div>
 
-          {/* Profile Image */}
-          <Box className="xl:w-1/2 mt-8 xl:mt-0 xl:ml-8 flex justify-end">
-            <Box className="rounded-full overflow-hidden w-100 h-100">
-              <Image
-                src="ayoub.jpg"
-                alt="Ayoub Oueslati"
-                width={500}
-                height={500}
-                className="object-cover w-full h-full"
-              />
-            </Box>
-          </Box>
-        </div>
+          {/* Main content — fades in after typing */}
+          <div ref={heroContentRef} className="hero-content">
+            <h1 className="hero-name">Ayoub Oueslati</h1>
+            <p className="hero-subtitle">Software Engineer · Mobile &amp; Web</p>
+          </div>
 
-        {/* Technologies Header */}
-        <Box textAlign="center" mt={8}>
-          <Text
-            fontSize="3xl"
-            fontWeight="bold"
-            color={colorMode === 'light' ? 'gray.800' : 'white'}
-            fontFamily="'Montserrat', sans-serif"
-            textTransform="uppercase"
-            letterSpacing="wide"
-            fontStyle={"italic"}
-          >
+          {/* Scroll arrow */}
+          <a ref={heroArrowRef} className="hero-scroll-arrow" href="#about" aria-label="Scroll to about">
+            <span>Scroll</span>
+            <div className="scroll-chevron" aria-hidden="true" />
+          </a>
+        </section>
 
-            Technologies
-          </Text>
-        </Box>
+        <div className="tl-divider" />
 
-        {/* Tech Cards Section */}
-        <Flex justifyContent="center" mt={8} flexWrap="wrap" gap={4}>
-          {techCards.map((card, index) => (
-            <Box key={index} width={["100%", "48%", "30%"]} mb={4} ml={2}>
-              <TechCard title={card.title} languages={card.languages} imagePath={card.imagePath} />
-            </Box>
-          ))}
-        </Flex>
+        {/* ═══════ ABOUT ═══════ */}
+        <section id="about" aria-label="About">
+          <div className="tl-section">
+            <p className="section-label reveal"> about</p>
+            <h2 className="section-title reveal">Who I am.</h2>
+            <div className="about-grid">
+              <div className="reveal">
+                <div className="about-avatar" aria-label="Ayoub Oueslati">
+                  <img
+                    src="/images/ayoubpic.jpeg"
+                    alt="Ayoub Oueslati"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '50%',
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="about-bio reveal">
+                  Passionate software engineer building mobile apps, web platforms, and scalable
+                  backend systems. I specialise in cross-platform development, event-driven
+                  architectures, and AI-powered features — from idea to deployment.
+                </p>
+                <div className="about-pills reveal">
+                  <span className="pill">📍 Tunisia</span>
+                  <span className="pill">🎓 Software Engineering</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
+        <div className="tl-divider" />
 
-       {/* Skills Section */}
-<Box mt={12}>
-  <Text fontSize="3xl" fontStyle={'italic'} fontWeight="bold" textAlign="center" mb={4}>Skills</Text>
-  <Skills />
-</Box>
+        {/* ═══════ EXPERIENCE ═══════ */}
+        <section id="experience" aria-label="Experience">
+          <div className="tl-section">
+            <p className="section-label reveal"> experience</p>
+            <h2 className="section-title reveal">Where I&apos;ve worked.</h2>
+            <div className="timeline">
+              {experienceData.map((entry, i) => (
+                <div key={i} className="timeline-entry reveal">
+                  <div className="timeline-dot" aria-hidden="true" />
+                  <p className="timeline-date">{entry.date}</p>
+                  <p className="timeline-role">
+                    {entry.role} · <em style={{ opacity: 0.7 }}>{entry.company}</em>
+                  </p>
+                  <p className="timeline-desc">{entry.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <div className="tl-divider" />
 
+        {/* ═══════ TECHNOLOGIES ═══════ */}
+        <section id="skills" aria-label="Technologies">
+          <div className="tl-section">
+            <p className="section-label reveal"> technologies</p>
+            <h2 className="section-title reveal">What I build with.</h2>
 
-        {/* Contact Section */}
-        <ContactSection />
+            {/* Ticker */}
+            <div className="ticker-wrapper reveal" aria-hidden="true">
+              <div className="ticker-track">
+                {[...tickerItems, ...tickerItems].map((item, i) => (
+                  <span key={i} className="ticker-item">
+                    {item}
+                    <span className="ticker-sep">·</span>
+                  </span>
+                ))}
+              </div>
+            </div>
 
-        {/* Footer */}
-        <Footer />
-      </div>
-    </section>
+            {/* Category grid */}
+            <div className="cat-grid">
+              {categories.map((cat) => (
+                <div key={cat.label} className="cat-card reveal">
+                  <p className="cat-label">{cat.label}</p>
+                  <ul className="cat-list" role="list">
+                    {cat.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="tl-divider" />
+
+        {/* ═══════ PROJECTS ═══════ */}
+        <section id="projects" aria-label="Projects">
+          <div className="tl-section">
+            <p className="section-label reveal"> projects</p>
+            <h2 className="section-title reveal">Selected work.</h2>
+            <div className="projects-grid">
+              {projects.map((p) => (
+                <article key={p.index} className="project-card reveal" tabIndex={0} aria-label={p.name}>
+                  <span className="project-index" aria-hidden="true">{p.index}</span>
+                  <span className="project-arrow" aria-hidden="true">→</span>
+                  <h3 className="project-name">{p.name}</h3>
+                  <div className="project-pills">
+                    {p.tags.map((tag) => (
+                      <span key={tag} className="project-pill">{tag}</span>
+                    ))}
+                  </div>
+                  <p className="project-desc">{p.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="tl-divider" />
+
+        {/* ═══════ CONTACT ═══════ */}
+        <section id="contact" aria-label="Contact">
+          <div className="contact-section">
+            <p className="section-label reveal"> contact</p>
+            <h2 className="contact-headline reveal">Let&apos;s build<br />something.</h2>
+            <p className="contact-subline reveal">Open to freelance, full-time &amp; collaborations.</p>
+
+            {/* Email copy */}
+            <div className="contact-email-wrap reveal">
+              <button
+                className="contact-email"
+                onClick={copyEmail}
+                aria-label="Copy email address to clipboard"
+                type="button"
+                style={{ background: 'none', border: 'none', fontFamily: 'inherit' }}
+              >
+                ayoubweslati00@gmail.com
+              </button>
+              <span id="copied-tooltip" className="copied-tooltip" role="status" aria-live="polite">
+                Copied!
+              </span>
+            </div>
+
+            {/* Socials */}
+            <div className="contact-socials reveal">
+              <a
+                href="https://github.com/ayouboueslati"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-btn"
+                aria-label="GitHub profile"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/ayoub-weslati-73b697202/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-btn"
+                aria-label="LinkedIn profile"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════ FOOTER ═══════ */}
+        <footer className="tl-footer">
+          <p>© 2025 Ayoub Oueslati</p>
+        </footer>
+      </main>
+    </>
   );
-};
-
-export default Home;
+}
