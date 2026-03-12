@@ -66,7 +66,7 @@ export default function FloatingTechBackground() {
     
     const selected = iconPool.slice(0, count).sort(() => 0.5 - Math.random());
 
-    const generatedIcons = selected.map((Icon, i) => {
+    const generatedIcons = selected.map((Icon) => {
       return {
         Icon,
         delay: Math.random() * 20, 

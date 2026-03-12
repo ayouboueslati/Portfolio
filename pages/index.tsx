@@ -209,10 +209,10 @@ export default function Home() {
           <div className="hero-content">
             <h1 className="hero-name">Ayoub Oueslati</h1>
             <p className="hero-subtitle">Software Engineer · Mobile &amp; Web</p>
-            <a href="/OueslatiAyoub.pdf" download="Ayoub_Oueslati_CV.pdf" className="cv-btn">
+            <Link href="/OueslatiAyoub.pdf" download="Ayoub_Oueslati_CV.pdf" className="cv-btn">
               <span className="cv-btn-icon">↓</span>
               Download CV
-            </a>
+            </Link>
           </div>
 
           {/* Scroll arrow */}

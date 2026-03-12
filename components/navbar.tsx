@@ -43,9 +43,9 @@ export default function Navbar() {
         <div className="tl-nav-bg-grain" aria-hidden="true" />
         
         {/* Logo */}
-        <a href="/" className="tl-nav-logo" aria-label="Home">
+        <Link href="/" className="tl-nav-logo" aria-label="Home">
           AO
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <ul className="tl-nav-links" role="list">
