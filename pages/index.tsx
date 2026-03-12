@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
 
 /* ─── Data ─────────────────────────────────────────────── */
@@ -97,39 +97,6 @@ const projects = [
 /* ─── Home Component ────────────────────────────────────── */
 
 export default function Home() {
-  const heroTerminalRef = useRef<HTMLSpanElement>(null);
-  const heroContentRef = useRef<HTMLDivElement>(null);
-  const heroArrowRef = useRef<HTMLAnchorElement>(null);
-  const heroTerminalWrapRef = useRef<HTMLDivElement>(null);
-
-  /* Terminal typing animation + page reveal */
-  useEffect(() => {
-    const termEl = heroTerminalRef.current;
-    const contentEl = heroContentRef.current;
-    const arrowEl = heroArrowRef.current;
-    const wrapEl = heroTerminalWrapRef.current;
-    if (!termEl || !contentEl || !arrowEl || !wrapEl) return;
-
-    const text = '> Ayoub Oueslati_';
-    let i = 0;
-    wrapEl.classList.add('active');
-
-    const interval = setInterval(() => {
-      termEl.textContent = text.slice(0, i + 1);
-      i++;
-      if (i >= text.length) {
-        clearInterval(interval);
-        // blink for 600ms then fade in content
-        setTimeout(() => {
-          contentEl.classList.add('loaded');
-          arrowEl.classList.add('loaded');
-        }, 600);
-      }
-    }, 55);
-
-    return () => clearInterval(interval);
-  }, []);
-
   /* IntersectionObserver for scroll reveals */
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -173,24 +140,30 @@ export default function Home() {
       </Head>
 
       <main>
+        {/* ── Page Loader ── */}
+        <div id="page-loader" aria-hidden="true">
+          <div className="loader-terminal">
+            &gt; Ayoub Oueslati_
+            <span className="loader-cursor" />
+          </div>
+        </div>
+
         {/* ═══════ HERO ═══════ */}
         <section className="hero-section" aria-label="Hero">
           <div className="hero-bg" aria-hidden="true" />
 
-          {/* Terminal line */}
-          <div ref={heroTerminalWrapRef} className="hero-terminal" aria-hidden="true">
-            <span ref={heroTerminalRef} />
-            <span className="cursor-blink" />
-          </div>
-
           {/* Main content — fades in after typing */}
-          <div ref={heroContentRef} className="hero-content">
+          <div className="hero-content">
             <h1 className="hero-name">Ayoub Oueslati</h1>
             <p className="hero-subtitle">Software Engineer · Mobile &amp; Web</p>
+            <a href="/OueslatiAyoub.pdf" download="Ayoub_Oueslati_CV.pdf" className="cv-btn">
+              <span className="cv-btn-icon">↓</span>
+              Download CV
+            </a>
           </div>
 
           {/* Scroll arrow */}
-          <a ref={heroArrowRef} className="hero-scroll-arrow" href="#about" aria-label="Scroll to about">
+          <a id="hero-scroll-arrow" className="hero-scroll-arrow" href="#about" aria-label="Scroll to about" style={{ opacity: 0, transition: 'opacity 1s 1.5s' }}>
             <span>Scroll</span>
             <div className="scroll-chevron" aria-hidden="true" />
           </a>
@@ -201,6 +174,7 @@ export default function Home() {
         {/* ═══════ ABOUT ═══════ */}
         <section id="about" aria-label="About">
           <div className="tl-section">
+            <span className="section-number reveal">01 —</span>
             <p className="section-label reveal"> about</p>
             <h2 className="section-title reveal">Who I am.</h2>
             <div className="about-grid">
@@ -228,16 +202,42 @@ export default function Home() {
                   <span className="pill">📍 Tunisia</span>
                   <span className="pill">🎓 Software Engineering</span>
                 </div>
+                <div className="language-strip reveal">
+                  <span className="lang-item"><span className="lang-flag">🇹🇳</span> Arabic</span>
+                  <span className="lang-item"><span className="lang-flag">🇫🇷</span> French</span>
+                  <span className="lang-item"><span className="lang-flag">🇬🇧</span> English</span>
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* ═══════ STATS STRIP ═══════ */}
+        <div className="stats-strip reveal">
+          <div className="stat-item">
+            <p className="stat-number">4+</p>
+            <p className="stat-label">Internships</p>
+          </div>
+          <div className="stat-item">
+            <p className="stat-number">8+</p>
+            <p className="stat-label">Projects Built</p>
+          </div>
+          <div className="stat-item">
+            <p className="stat-number">3</p>
+            <p className="stat-label">Languages Spoken</p>
+          </div>
+          <div className="stat-item">
+            <p className="stat-number">3</p>
+            <p className="stat-label">Countries</p>
+          </div>
+        </div>
 
         <div className="tl-divider" />
 
         {/* ═══════ EXPERIENCE ═══════ */}
         <section id="experience" aria-label="Experience">
           <div className="tl-section">
+            <span className="section-number reveal">02 —</span>
             <p className="section-label reveal"> experience</p>
             <h2 className="section-title reveal">Where I&apos;ve worked.</h2>
             <div className="timeline">
@@ -260,6 +260,7 @@ export default function Home() {
         {/* ═══════ TECHNOLOGIES ═══════ */}
         <section id="skills" aria-label="Technologies">
           <div className="tl-section">
+            <span className="section-number reveal">03 —</span>
             <p className="section-label reveal"> technologies</p>
             <h2 className="section-title reveal">What I build with.</h2>
 
@@ -296,6 +297,7 @@ export default function Home() {
         {/* ═══════ PROJECTS ═══════ */}
         <section id="projects" aria-label="Projects">
           <div className="tl-section">
+            <span className="section-number reveal">04 —</span>
             <p className="section-label reveal"> projects</p>
             <h2 className="section-title reveal">Selected work.</h2>
             <div className="projects-grid">
@@ -321,6 +323,7 @@ export default function Home() {
         {/* ═══════ CONTACT ═══════ */}
         <section id="contact" aria-label="Contact">
           <div className="contact-section">
+            <span className="section-number reveal">05 —</span>
             <p className="section-label reveal"> contact</p>
             <h2 className="contact-headline reveal">Let&apos;s build<br />something.</h2>
             <p className="contact-subline reveal">Open to freelance, full-time &amp; collaborations.</p>

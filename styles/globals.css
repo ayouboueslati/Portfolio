@@ -208,17 +208,54 @@ img { max-width: 100%; display: block; }
   100% { background-position: 0% 50%; }
 }
 
-.hero-terminal {
-  font-family: var(--font-mono);
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
-  color: var(--accent);
-  margin-bottom: 2rem;
-  letter-spacing: 0.05em;
-  opacity: 0;
-  transition: opacity 0.3s;
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 19ch; }
 }
 
-.hero-terminal.active { opacity: 1; }
+@keyframes terminalFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Page Loader ───────────────────────────────────────── */
+@keyframes loaderExit {
+  0%   { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+#page-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Hold 1.2s (typing) + 0.4s pause, then fade 0.6s */
+  animation: loaderExit 0.6s ease 1.6s forwards;
+  pointer-events: none;
+}
+
+.loader-terminal {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 19ch;
+  animation: terminalFade 0.1s ease 0.1s both, typewriter 1.2s steps(19, end) 0.1s both;
+}
+
+.loader-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: blink 0.7s step-end infinite;
+}
 
 .cursor-blink {
   display: inline-block;
@@ -234,15 +271,18 @@ img { max-width: 100%; display: block; }
   50% { opacity: 0; }
 }
 
-.hero-content {
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  position: relative;
-  z-index: 1;
+@keyframes contentReveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.hero-content.loaded { opacity: 1; }
+.hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  /* Reveal after loader has exited (~2.2s total) */
+  animation: contentReveal 0.8s ease 2s both;
+}
 
 .hero-name {
   font-family: var(--font-serif);
@@ -749,3 +789,201 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(to right, transparent, var(--border), transparent);
   margin: 0 auto;
 }
+
+/* ── Scroll Progress Bar ───────────────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  z-index: 10000;
+  transition: width 80ms linear;
+  pointer-events: none;
+}
+
+/* ── Stats Strip ───────────────────────────────────────── */
+.stats-strip {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 0;
+  margin: 0 3rem;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 160px;
+  text-align: center;
+  padding: 1rem 2rem;
+  position: relative;
+}
+
+.stat-item + .stat-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border);
+}
+
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .stats-strip { margin: 0 1.5rem; }
+  .stat-item + .stat-item::before { display: none; }
+  .stat-item { border-top: 1px solid var(--border); }
+  .stat-item:first-child { border-top: none; }
+}
+
+/* ── Currently Block ───────────────────────────────────── */
+.currently-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem 2.5rem;
+  border: 1px solid var(--border);
+  margin-bottom: 6rem;
+}
+
+.currently-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.currently-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 6px #00ff88;
+  flex-shrink: 0;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.currently-key {
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+}
+
+.currently-value {
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* ── CV Download Button ────────────────────────────────── */
+.cv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3rem;
+  position: relative;
+  text-decoration: none;
+  cursor: none;
+  transition: color 400ms ease;
+  padding-bottom: 0.3rem;
+}
+
+.cv-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 400ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.cv-btn:hover {
+  color: var(--text);
+}
+
+.cv-btn:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.cv-btn-icon {
+  font-size: 0.9rem;
+  color: var(--accent);
+  transition: transform 400ms ease;
+}
+
+.cv-btn:hover .cv-btn-icon { 
+  transform: translateY(3px); 
+}
+
+/* ── Section Number Labels ─────────────────────────────── */
+.section-number {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--muted);
+  letter-spacing: 0.25em;
+  opacity: 0.5;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* ── Language Strip (About) ────────────────────────────── */
+.language-strip {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.lang-item {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lang-flag { font-size: 0.9rem; }
+
