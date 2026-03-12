@@ -19,7 +19,7 @@ const experienceData = [
   {
     date: 'Jun 2024 – Sept 2024',
     role: 'Mobile Developer Intern',
-    company: 'SportDivers, Tunisia',
+    company: 'Ebuild, Tunisia',
     desc: 'Cross-platform app for a sports center: scheduling, payments, chat & dashboard.',
   },
   {
