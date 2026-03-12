@@ -1,39 +1,70 @@
-import { Link } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 
 const links = [
-  { label: 'About', href: '/#about' },
-  { label: 'Experience', href: '/#experience' },
-  { label: 'Skills', href: '/#skills' },
-  { label: 'Projects', href: '/#projects' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'About', id: 'about' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Contact', id: 'contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+      
+      const sections = links.map(l => document.getElementById(l.id));
+      let current = '';
+      for (const section of sections) {
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          // Find the section that dominates the middle of the screen
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            current = section.id;
+          }
+        }
+      }
+      if (current) setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Init
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
       <nav className={`tl-nav${scrolled ? ' scrolled' : ''}`} role="navigation" aria-label="Main navigation">
+        <div className="tl-nav-bg-grain" aria-hidden="true" />
+        
         {/* Logo */}
-        <Link href="/" className="tl-nav-logo" aria-label="Home">
+        <a href="/" className="tl-nav-logo" aria-label="Home">
           AO
-        </Link>
+        </a>
 
         {/* Desktop links */}
         <ul className="tl-nav-links" role="list">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href}>{l.label}</a>
-            </li>
-          ))}
+          {links.map((l) => {
+            const isActive = activeSection === l.id;
+            return (
+              <li key={l.id}>
+                <a href={`/#${l.id}`} className={isActive ? 'active-cli' : ''}>
+                  {isActive ? (
+                    <>
+                      &gt; {l.label.toLowerCase()}
+                      <span className="blink">_</span>
+                    </>
+                  ) : (
+                    l.label
+                  )}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Hamburger */}
@@ -58,11 +89,14 @@ export default function Navbar() {
         >
           ✕
         </button>
-        {links.map((l) => (
-          <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
-            {l.label}
-          </a>
-        ))}
+        {links.map((l) => {
+          const isActive = activeSection === l.id;
+          return (
+            <a key={l.id} href={`/#${l.id}`} onClick={() => setMenuOpen(false)} className={isActive ? 'active-cli' : ''}>
+              {isActive ? `> ${l.label.toLowerCase()}_` : l.label}
+            </a>
+          );
+        })}
       </div>
     </>
   );

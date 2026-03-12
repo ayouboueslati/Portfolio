@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
+import FloatingTechBackground from '../components/FloatingTechBackground';
 
 /* ─── Data ─────────────────────────────────────────────── */
 
@@ -94,6 +95,55 @@ const projects = [
   },
 ];
 
+/* ─── Components ───────────────────────────────────────── */
+
+const AnimatedCounter = ({ end, suffix = '' }: { end: number, suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    let startTime: number | null = null;
+    const duration = 2000; // 2 seconds
+    let animationFrame: number;
+    let observer: IntersectionObserver;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      // Easing function (easeOutExpo)
+      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      
+      setCount(Math.floor(easeProgress * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    if (ref.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            startTime = null;
+            animationFrame = requestAnimationFrame(animate);
+            observer.disconnect(); // Only animate once
+          }
+        },
+        { threshold: 0.5 }
+      );
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (observer) observer.disconnect();
+    };
+  }, [end]);
+
+  return <p ref={ref} className="stat-number">{count}{suffix}</p>;
+};
+
 /* ─── Home Component ────────────────────────────────────── */
 
 export default function Home() {
@@ -124,14 +174,14 @@ export default function Home() {
 
   /* Email copy */
   const copyEmail = () => {
-    navigator.clipboard.writeText('ayoubweslati00@gmail.com').catch(() => { });
+    navigator.clipboard.writeText('ayoubweslati00@gmail.com');
     const tooltip = document.getElementById('copied-tooltip');
-    if (!tooltip) return;
-    tooltip.classList.add('show');
-    setTimeout(() => tooltip.classList.remove('show'), 2000);
-  };
-
-  return (
+    if (tooltip) {
+      tooltip.innerText = 'Address Copied';
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.remove('show'), 2000);
+    }
+  };return (
     <>
       <Head>
         <title>Ayoub Oueslati — Software Engineer</title>
@@ -179,16 +229,12 @@ export default function Home() {
             <h2 className="section-title reveal">Who I am.</h2>
             <div className="about-grid">
               <div className="reveal">
-                <div className="about-avatar" aria-label="Ayoub Oueslati">
+                <div className="about-avatar-wrap">
+                  <div className="about-avatar-frame"></div>
                   <img
                     src="/images/ayoubpic.jpeg"
                     alt="Ayoub Oueslati"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '50%',
-                    }}
+                    className="about-avatar-img"
                   />
                 </div>
               </div>
@@ -215,19 +261,19 @@ export default function Home() {
         {/* ═══════ STATS STRIP ═══════ */}
         <div className="stats-strip reveal">
           <div className="stat-item">
-            <p className="stat-number">4+</p>
+            <AnimatedCounter end={4} suffix="+" />
             <p className="stat-label">Internships</p>
           </div>
           <div className="stat-item">
-            <p className="stat-number">8+</p>
+            <AnimatedCounter end={8} suffix="+" />
             <p className="stat-label">Projects Built</p>
           </div>
           <div className="stat-item">
-            <p className="stat-number">3</p>
+            <AnimatedCounter end={3} />
             <p className="stat-label">Languages Spoken</p>
           </div>
           <div className="stat-item">
-            <p className="stat-number">3</p>
+            <AnimatedCounter end={3} />
             <p className="stat-label">Countries</p>
           </div>
         </div>
@@ -297,6 +343,7 @@ export default function Home() {
         {/* ═══════ PROJECTS ═══════ */}
         <section id="projects" aria-label="Projects">
           <div className="tl-section">
+            <FloatingTechBackground />
             <span className="section-number reveal">04 —</span>
             <p className="section-label reveal"> projects</p>
             <h2 className="section-title reveal">Selected work.</h2>
@@ -305,7 +352,8 @@ export default function Home() {
                 <article key={p.index} className="project-card reveal" tabIndex={0} aria-label={p.name}>
                   <span className="project-index" aria-hidden="true">{p.index}</span>
                   <span className="project-arrow" aria-hidden="true">→</span>
-                  <h3 className="project-name">{p.name}</h3>
+                  <span className="project-id" aria-hidden="true">[ ID: 0x00{p.index} ]</span>
+                  <h3 className="project-name" data-text={p.name}>{p.name}</h3>
                   <div className="project-pills">
                     {p.tags.map((tag) => (
                       <span key={tag} className="project-pill">{tag}</span>
@@ -324,24 +372,23 @@ export default function Home() {
         <section id="contact" aria-label="Contact">
           <div className="contact-section">
             <span className="section-number reveal">05 —</span>
-            <p className="section-label reveal"> contact</p>
+            <p className="section-label reveal"> init connection</p>
+            
             <h2 className="contact-headline reveal">Let&apos;s build<br />something.</h2>
             <p className="contact-subline reveal">Open to freelance, full-time &amp; collaborations.</p>
 
-            {/* Email copy */}
-            <div className="contact-email-wrap reveal">
+            <div className="contact-luxe-wrap reveal">
+              <span id="copied-tooltip" className="contact-luxe-feedback" role="status" aria-live="polite">
+                Address Copied
+              </span>
               <button
-                className="contact-email"
+                className="contact-luxe-email"
                 onClick={copyEmail}
-                aria-label="Copy email address to clipboard"
+                aria-label="Copy email address"
                 type="button"
-                style={{ background: 'none', border: 'none', fontFamily: 'inherit' }}
               >
                 ayoubweslati00@gmail.com
               </button>
-              <span id="copied-tooltip" className="copied-tooltip" role="status" aria-live="polite">
-                Copied!
-              </span>
             </div>
 
             {/* Socials */}
@@ -353,7 +400,7 @@ export default function Home() {
                 className="social-btn"
                 aria-label="GitHub profile"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
                 </svg>
               </a>
@@ -364,7 +411,7 @@ export default function Home() {
                 className="social-btn"
                 aria-label="LinkedIn profile"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
               </a>

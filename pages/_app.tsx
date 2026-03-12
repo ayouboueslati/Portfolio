@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     window.addEventListener('mousemove', onMove);
     window.addEventListener('scroll', onScroll, { passive: true });
+    
     return () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('scroll', onScroll);
