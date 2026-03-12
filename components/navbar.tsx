@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const links = [
   { label: 'About', id: 'about' },
@@ -52,7 +53,7 @@ export default function Navbar() {
             const isActive = activeSection === l.id;
             return (
               <li key={l.id}>
-                <a href={`/#${l.id}`} className={isActive ? 'active-cli' : ''}>
+                <Link href={`/#${l.id}`} className={isActive ? 'active-cli' : ''}>
                   {isActive ? (
                     <>
                       &gt; {l.label.toLowerCase()}
@@ -61,7 +62,7 @@ export default function Navbar() {
                   ) : (
                     l.label
                   )}
-                </a>
+                </Link>
               </li>
             );
           })}
@@ -92,9 +93,9 @@ export default function Navbar() {
         {links.map((l) => {
           const isActive = activeSection === l.id;
           return (
-            <a key={l.id} href={`/#${l.id}`} onClick={() => setMenuOpen(false)} className={isActive ? 'active-cli' : ''}>
+            <Link key={l.id} href={`/#${l.id}`} onClick={() => setMenuOpen(false)} className={isActive ? 'active-cli' : ''}>
               {isActive ? `> ${l.label.toLowerCase()}_` : l.label}
-            </a>
+            </Link>
           );
         })}
       </div>

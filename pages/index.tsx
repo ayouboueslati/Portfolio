@@ -1,5 +1,8 @@
+// Deployment trigger: 2026-03-12
 import { useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
 import FloatingTechBackground from '../components/FloatingTechBackground';
 
 /* ─── Data ─────────────────────────────────────────────── */
@@ -213,10 +216,10 @@ export default function Home() {
           </div>
 
           {/* Scroll arrow */}
-          <a id="hero-scroll-arrow" className="hero-scroll-arrow" href="#about" aria-label="Scroll to about" style={{ opacity: 0, transition: 'opacity 1s 1.5s' }}>
+          <Link id="hero-scroll-arrow" className="hero-scroll-arrow" href="#about" aria-label="Scroll to about" style={{ opacity: 0, transition: 'opacity 1s 1.5s' }}>
             <span>Scroll</span>
             <div className="scroll-chevron" aria-hidden="true" />
-          </a>
+          </Link>
         </section>
 
         <div className="tl-divider" />
@@ -231,10 +234,13 @@ export default function Home() {
               <div className="reveal">
                 <div className="about-avatar-wrap">
                   <div className="about-avatar-frame"></div>
-                  <img
+                  <Image
                     src="/images/ayoubpic.jpeg"
                     alt="Ayoub Oueslati"
                     className="about-avatar-img"
+                    width={400}
+                    height={500}
+                    priority
                   />
                 </div>
               </div>
