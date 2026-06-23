@@ -251,7 +251,7 @@ export default function Home() {
                   architectures, and AI-powered features — from idea to deployment.
                 </p>
                 <div className="about-pills reveal">
-                  <span className="pill">📍 Tunisia</span>
+                  <span className="pill">📍 Riga Latvia</span>
                   <span className="pill">🎓 Software Engineering</span>
                 </div>
                 <div className="language-strip reveal">
