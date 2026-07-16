@@ -47,6 +47,33 @@ const categories = [
   { label: 'Design', items: ['UI/UX Design', 'Figma'] },
 ];
 
+const freelanceProjects = [
+  {
+    index: 'F1',
+    name: 'The Chillery',
+    tags: ['Web', 'E-commerce', 'Stripe'],
+    status: 'Live',
+    statusColor: 'live',
+    desc: 'Premium e-commerce store for smoking accessories — Stripe payments, age verification & full admin dashboard.',
+  },
+  {
+    index: 'F2',
+    name: 'Tapply',
+    tags: ['SaaS', 'NFC', 'PostgreSQL'],
+    status: 'In Development',
+    statusColor: 'dev',
+    desc: 'Multi-tenant NFC event lead-capture platform. Replaces paper sign-up sheets with instant digital forms using secure, isolated org databases.',
+  },
+  {
+    index: 'F3',
+    name: 'Nour Distribution',
+    tags: ['Web', 'B2B/B2C', 'Dashboard'],
+    status: 'Offline',
+    statusColor: 'offline',
+    desc: 'African hair distribution platform — ordering, invoice generation, stock management & complete back office.',
+  },
+];
+
 const projects = [
   {
     index: '01',
@@ -56,42 +83,30 @@ const projects = [
   },
   {
     index: '02',
-    name: 'The Chillery',
-    tags: ['Web', 'E-commerce', 'Freelance'],
-    desc: 'Premium e-commerce store for smoking accessories — Stripe payments, age verification & full admin dashboard.',
-  },
-  {
-    index: '03',
-    name: 'Nour Distribution',
-    tags: ['Web', 'B2B/B2C', 'Freelance'],
-    desc: 'African hair distribution platform — ordering, invoice generation, stock management & complete back office.',
-  },
-  {
-    index: '04',
     name: 'Booking & Event System',
     tags: ['Web', 'Mobile', 'Ionic', 'Kafka'],
     desc: 'Event sourcing-based booking system for lake tours with AI recommendations and real-time reservation workflows.',
   },
   {
-    index: '05',
+    index: '03',
     name: 'Job Finder – Renewable Energy',
     tags: ['iOS', 'Android', 'Flutter'],
     desc: 'Multi-platform job platform for the renewable energy sector — SwiftUI, Kotlin & Flutter dashboard.',
   },
   {
-    index: '06',
+    index: '04',
     name: 'Iqraa – Spiritual Guide App',
     tags: ['Mobile', 'Web', 'Blockchain'],
     desc: 'Religious companion app with Flutter, VueJS, NodeJS, Python & Hedera blockchain.',
   },
   {
-    index: '07',
+    index: '05',
     name: 'Artistic Avenue',
     tags: ['Mobile', 'Web', 'Symfony'],
     desc: 'Cross-platform platform for artists to display work and engage with audiences.',
   },
   {
-    index: '08',
+    index: '06',
     name: 'DevOps CI/CD Pipeline',
     tags: ['DevOps', 'Docker', 'Kubernetes'],
     desc: 'Automated CI/CD pipeline with Spring Boot, Jenkins, SonarQube, Grafana & Kubernetes.',
@@ -346,11 +361,46 @@ export default function Home() {
 
         <div className="tl-divider" />
 
-        {/* ═══════ PROJECTS ═══════ */}
-        <section id="projects" aria-label="Projects">
+        {/* ═══════ FREELANCE WORK ═══════ */}
+        <section id="freelance" aria-label="Freelance Work">
           <div className="tl-section">
             <FloatingTechBackground />
             <span className="section-number reveal">04 —</span>
+            <p className="section-label reveal"> client work</p>
+            <h2 className="section-title reveal">Freelance &amp; Live Projects.</h2>
+            <div className="projects-grid">
+              {freelanceProjects.map((p) => (
+                <article key={p.index} className="project-card reveal" tabIndex={0} aria-label={p.name}>
+                  <span className="project-index" aria-hidden="true">{p.index}</span>
+                  <span className="project-arrow" aria-hidden="true">→</span>
+                  <span className="project-id" aria-hidden="true">[ ID: 0x00{p.index} ]</span>
+                  
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="project-name" data-text={p.name} style={{ marginBottom: 0 }}>{p.name}</h3>
+                    <span className={`status-pill ${p.statusColor}`}>
+                      <span className="status-dot"></span>
+                      {p.status}
+                    </span>
+                  </div>
+                  
+                  <div className="project-pills mt-3">
+                    {p.tags.map((tag) => (
+                      <span key={tag} className="project-pill">{tag}</span>
+                    ))}
+                  </div>
+                  <p className="project-desc">{p.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="tl-divider" />
+
+        {/* ═══════ PROJECTS ═══════ */}
+        <section id="projects" aria-label="Projects">
+          <div className="tl-section">
+            <span className="section-number reveal">05 —</span>
             <p className="section-label reveal"> projects</p>
             <h2 className="section-title reveal">Selected work.</h2>
             <div className="projects-grid">
@@ -377,7 +427,7 @@ export default function Home() {
         {/* ═══════ CONTACT ═══════ */}
         <section id="contact" aria-label="Contact">
           <div className="contact-section">
-            <span className="section-number reveal">05 —</span>
+            <span className="section-number reveal">06 —</span>
             <p className="section-label reveal"> init connection</p>
             
             <h2 className="contact-headline reveal">Let&apos;s build<br />something.</h2>

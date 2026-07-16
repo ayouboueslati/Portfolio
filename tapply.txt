@@ -1,0 +1,44 @@
+Tapply
+Tap. Apply. Follow up.
+Technical & design overview — NFC event lead-capture platform
+1. Description
+Tapply replaces the paper sign-up sheet, Google Form, or manually collected resumes at a recruiting event or promotional stand with a single tap. Each stand carries one reusable NFC card. A candidate taps it, a form opens instantly on their phone, and they fill in their own details — no presenter needed to collect or retype anything.
+Every organization — a university, a company — gets its own account: they design their own form fields, manage their own stands and cards, and see every submission land in an admin dashboard. From there, staff move each candidate through a simple pipeline: "To contact" → "Contacted" → sorted into interest-based groups such as "MBA" or "Engineering."
+Tapply is sold as a subscription to multiple organizations from one shared, centrally hosted platform — each organization's data, branding, and billing are fully separated, without needing separate infrastructure per client.
+2. How it works — the core logic
+
+Figure 1 — from a tap at the stand to a sorted table in the dashboard
+Each stand's NFC card holds nothing but a link to that organization's form. All logic — which organization, which form, where the submission lands — is resolved live on the server every time someone taps. The card itself never changes; only the data behind it does.
+
+3. Architecture — multi-tenant with isolation
+Tapply is built as a single, shared, multi-tenant platform rather than a separate deployment per client. Every organization's rows live in the same database, distinguished by an org_id — but that boundary is enforced at the database layer itself, not just in application code, using PostgreSQL row-level security. This means even a bug in application code cannot accidentally return one organization's data to another.
+
+Figure 2 — how organizations stay isolated on shared infrastructure
+The practical effect: a compromised admin login at one university only exposes that university's own data. A vulnerability at the infrastructure level is the one scenario that could affect multiple organizations at once — which is exactly why the database-level enforcement, encryption, and hardening steps below are treated as required, not optional.
+4. Data model
+
+Figure 3 — core entities and relationships
+Organizations own their stands, staff accounts, form schema, and submissions. Each stand has exactly one card, identified by a random, unguessable token — never a sequential ID. A card can optionally carry a default branch tag, so a stand dedicated to one course or department can pre-fill that field automatically.
+5. Security measures
+Row-level security in PostgreSQL enforces org-level data isolation at the database, independent of application code
+HTTPS everywhere; encryption at rest via the hosting provider
+Random, unguessable card tokens — never sequential or predictable
+Rate limiting on the public form endpoint, the only unauthenticated surface, to prevent spam or scripted abuse
+Least-privilege database credentials for the application
+GDPR basics: consent on the public form, documented retention policy, data deletion on request
+Staff accounts with role-based permissions (org owner vs. staff) and instant deactivation on departure
+
+6. Technology stack
+7. Visual design system
+A restrained, premium look — dark charcoal-navy surfaces, frosted glass panels, and a single champagne-gold accent used sparingly for emphasis and key actions. Three colors, maximum, applied consistently across every screen.
+
+Glass panels: translucent frosted surfaces (subtle blur, thin hairline borders) layered over the dark background — used for cards, tables, and side panels
+Status pills and badges use restrained fills, not bright saturated colors, to keep the palette to three
+Optimized for fast load and clarity: no heavy imagery, no decorative animation — the glass effect comes from a handful of lightweight CSS properties, not extra assets
+
+Figure 4 — admin dashboard, luxury glass theme
+8. Open questions before implementation
+Confirm whether a stand implies a fixed branch, or candidates always choose manually
+Confirm whether status/category labels are fixed or fully custom per organization
+Confirm the organization's billing model — per event, monthly, or annual license
+Confirm card sourcing and the initial pilot's stand count

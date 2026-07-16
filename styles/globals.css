@@ -959,6 +959,56 @@ a.active-cli {
   100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
 }
 
+.status-pill {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  z-index: 2;
+  position: relative;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-pill.live {
+  background: rgba(0, 245, 212, 0.1);
+  color: #00f5d4;
+  border: 1px solid rgba(0, 245, 212, 0.2);
+}
+.status-pill.live .status-dot {
+  background: #00f5d4;
+  box-shadow: 0 0 8px #00f5d4;
+}
+
+.status-pill.dev {
+  background: rgba(254, 215, 102, 0.1);
+  color: #fed766;
+  border: 1px solid rgba(254, 215, 102, 0.2);
+}
+.status-pill.dev .status-dot {
+  background: #fed766;
+  box-shadow: 0 0 8px #fed766;
+}
+
+.status-pill.offline {
+  background: rgba(150, 150, 150, 0.05);
+  color: #999;
+  border: 1px solid rgba(150, 150, 150, 0.15);
+}
+.status-pill.offline .status-dot {
+  background: #777;
+}
+
 .project-pills {
   display: flex;
   gap: 0.5rem;
