@@ -10,19 +10,19 @@ import FloatingTechBackground from '../components/FloatingTechBackground';
 const experienceData = [
   {
     date: 'Jan 2025 – Jul 2025',
-    role: 'Final Year Project',
+    role: 'Software Engineer',
     company: 'Hendrik Thurau Enterprises, Switzerland',
     desc: 'Booking & event management system using event sourcing, Kafka, AI recommender & Ionic.',
   },
   {
     date: 'Jun 2024 – Sept 2024',
-    role: 'Mobile Developer Intern',
+    role: 'Mobile Developer',
     company: 'Tabaani Travel Agency, Tunisia',
     desc: 'Flutter mobile app for travel booking and trip management with Node.js backend.',
   },
   {
     date: 'Jun 2024 – Sept 2024',
-    role: 'Mobile Developer Intern',
+    role: 'Mobile Developer',
     company: 'Ebuild, Tunisia',
     desc: 'Cross-platform app for a sports center: scheduling, payments, chat & dashboard.',
   },
@@ -113,10 +113,10 @@ const AnimatedCounter = ({ end, suffix = '' }: { end: number, suffix?: string })
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      
+
       // Easing function (easeOutExpo)
       const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      
+
       setCount(Math.floor(easeProgress * end));
 
       if (progress < 1) {
@@ -184,7 +184,7 @@ export default function Home() {
       tooltip.classList.add('show');
       setTimeout(() => tooltip.classList.remove('show'), 2000);
     }
-  };return (
+  }; return (
     <>
       <Head>
         <title>Ayoub Oueslati — Software Engineer</title>
@@ -209,7 +209,7 @@ export default function Home() {
           <div className="hero-content">
             <h1 className="hero-name">Ayoub Oueslati</h1>
             <p className="hero-subtitle">Software Engineer · Mobile &amp; Web</p>
-            <Link href="/OueslatiAyoub.pdf" download="Ayoub_Oueslati_CV.pdf" className="cv-btn">
+            <Link href="/ayoub_oueslati_resume.pdf" download="Ayoub_Oueslati_CV.pdf" className="cv-btn">
               <span className="cv-btn-icon">↓</span>
               Download CV
             </Link>
@@ -379,7 +379,7 @@ export default function Home() {
           <div className="contact-section">
             <span className="section-number reveal">05 —</span>
             <p className="section-label reveal"> init connection</p>
-            
+
             <h2 className="contact-headline reveal">Let&apos;s build<br />something.</h2>
             <p className="contact-subline reveal">Open to freelance, full-time &amp; collaborations.</p>
 
